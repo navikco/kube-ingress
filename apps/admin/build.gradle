@@ -1,0 +1,171 @@
+buildscript {
+
+    ext {
+        springBootVersion = '2.2.6.RELEASE'
+        springBootAdminVersion = '2.2.2'
+        springCloudVersion = '2.2.2.RELEASE'
+        springCloudKubernetesVersion = "1.1.2.RELEASE"
+
+        kubeBuildNumber = 12
+        buildTime = new Date().format("yyyy-MM-dd HH:mm:ss")
+        gitTagName = project.version
+    }
+
+    println "BuildNumber >>> " + kubeBuildNumber
+    println "BuildTime >>> " + buildTime
+
+    repositories {
+
+        mavenLocal()
+        mavenCentral()
+
+        maven {
+
+            url "http://repository.jboss.org/nexus/content/groups/public/"
+        }
+        maven {
+
+            url "https://repo.spring.io/milestone/"
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+
+            url "http://www.datanucleus.org/downloads/maven2/"
+        }
+        maven {
+
+            url "https://repo.spring.io/libs-milestone/"
+        }
+        maven {
+
+            url "https://artifacts.alfresco.com/nexus/content/groups/public/"
+        }
+        maven {
+
+            url 'https://repo.adobe.com/nexus/content/repositories/public/'
+        }
+    }
+
+    dependencies {
+
+        classpath group: 'org.springframework.boot', name: 'spring-boot-gradle-plugin', version: "${springBootVersion}"
+        classpath "gradle.plugin.com.palantir.gradle.gitversion:gradle-git-version:0.11.0"
+        classpath "gradle.plugin.com.gorylenko.gradle-git-properties:gradle-git-properties:2.0.0"
+        classpath "io.spring.gradle:dependency-management-plugin:1.0.7.RELEASE"
+    }
+}
+
+apply plugin: 'groovy'
+apply plugin: 'jacoco'
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: "org.springframework.boot"
+
+apply plugin: io.spring.gradle.dependencymanagement.DependencyManagementPlugin
+apply plugin: com.palantir.gradle.gitversion.GitVersionPlugin
+apply plugin: com.gorylenko.GitPropertiesPlugin
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+springBoot {
+
+    buildInfo {
+        properties {
+            additional = [
+                    'KubeBuildNumber': project.kubeBuildNumber,
+                    'BuildTime'      : project.buildTime
+            ]
+        }
+    }
+}
+
+def details = versionDetails()
+
+println "|||GIT State||| :-> $project.name"
+println "<<<"
+println "\tProject Name :-> $project.name"
+println "\tProject Version :-> $project.version"
+println "\tBuild No# :-> $project.kubeBuildNumber"
+println "\tNEW GIT <<<TAG Name>>> :-> $project.gitTagName"
+println "\tGIT Hash :-> " + details.gitHash
+println "\tGIT Branch Name :-> " + details.branchName
+println "\tGIT Branch is Clean for New TAG??? :-> " + details.isCleanTag
+println ">>>"
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+        mavenBom "de.codecentric:spring-boot-admin-dependencies:${springBootAdminVersion}"
+    }
+}
+
+repositories {
+
+    mavenLocal()
+    mavenCentral()
+
+    maven {
+
+        url "https://artifacts.alfresco.com/nexus/content/groups/public/"
+    }
+    maven {
+
+        url 'https://repo.adobe.com/nexus/content/repositories/public/'
+    }
+    maven {
+
+        url "https://repo.spring.io/milestone/"
+    }
+    maven {
+
+        url "https://repo.spring.io/libs-milestone/"
+    }
+    maven {
+        url "https://repo.gradle.org/gradle/libs-releases-local/"
+    }
+}
+
+dependencies {
+
+    compile('org.springframework.boot:spring-boot-starter-web')
+
+    compile('org.springframework.boot:spring-boot-starter-security')
+
+    compile("de.codecentric:spring-boot-admin-server-cloud:${springBootAdminVersion}")
+
+    compile("de.codecentric:spring-boot-admin-starter-server:${springBootAdminVersion}")
+
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-commons', version: "${springCloudVersion}"
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-kubernetes-all', version: "${springCloudKubernetesVersion}"
+    runtime group: 'org.springframework.cloud', name: 'spring-cloud-dependencies', version: 'Hoxton.RELEASE', ext: 'pom'
+
+    compile group: 'ch.qos.logback.contrib', name: 'logback-jackson', version: '0.1.5'
+    compile group: 'ch.qos.logback.contrib', name: 'logback-json-classic', version: '0.1.5'
+}
+
+configurations.all {
+
+    exclude module: 'slf4j-log4j12'
+    exclude group: 'javax.servlet', module: 'servlet-api'
+}
+
+gitProperties {
+    dateFormat = "yyyy-MM-dd HH:mm:ss"
+    dateFormatTimeZone = "CST"
+}
+
+processResources {
+    filesMatching('bootstrap.yml') {
+        expand(project.properties)
+    }
+}
+
+bootRun {
+
+    systemProperties System.properties
+}

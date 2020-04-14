@@ -1,0 +1,74 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: accounts-deployment
+  namespace: kube-green
+  labels:
+    app: accounts
+    purpose: kube-green-containers
+  annotations:
+    version: 'latest'
+spec:
+  selector:
+    matchLabels:
+      app: accounts
+  template:
+    spec:
+      serviceAccountName: kube-green-admin
+      containers:
+        - image: localhost:5000/accounts:latest
+          imagePullPolicy: Always
+          name: accounts
+          volumeMounts:
+            - mountPath: /opt/mw/mount
+              name: kube-mount
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+              name: kube-port
+          env:
+            - name: management.endpoints.web.exposure.include
+              value: "*"
+            - name: management.endpoint.health.show-details
+              value: "always"
+            - name: logging.level.org
+              value: "ERROR"
+            - name: logging.level.com
+              value: "ERROR"
+          securityContext:
+            runAsUser: 1000
+            runAsGroup: 1000
+            allowPrivilegeEscalation: false
+          resources:
+            requests:
+              memory: "150Mi"
+              cpu: "250m"
+            limits:
+              memory: "500Mi"
+              cpu: "1"
+          args: ["green", "accounts", "localhost", "8080"]
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 10
+            timeoutSeconds: 2
+            periodSeconds: 5
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 20
+            timeoutSeconds: 2
+            periodSeconds: 8
+            failureThreshold: 5
+      volumes:
+        - name: kube-mount
+          emptyDir: {}
+      restartPolicy: Always
+    metadata:
+      labels:
+        app: accounts
+  replicas: 1
+

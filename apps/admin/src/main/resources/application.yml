@@ -1,0 +1,64 @@
+spring:
+  adminServer:
+    host: localhost
+    port: 8080
+  main:
+    allow-bean-definition-overriding: true
+
+security:
+  basic:
+    enabled: false
+
+---
+
+spring:
+  server:
+    use-forward-headers: true
+  boot:
+    admin:
+      context-path: /admin
+      ui:
+        brand: <img src="navik.png"><span><font color="green">Kube Land Microservices Dashboard</font></span>
+        public-url: "http://${KUBE_ADMIN_HOST}:${KUBE_ADMIN_PORT}/admin"
+
+info:
+  General:
+    Environment: ${spring.profiles.active}
+    GIT Repo: 'https://github.com/navikco/kube/tree/master/apps/admin'
+
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: ${spring.application.name}
+data:
+  application.yml: |-
+    spring:
+     cloud:
+      kubernetes:
+        discovery:
+          catalogServicesWatchDelay: 10000
+          all-namespaces: true
+          register: true
+          service-labels:
+            spring-boot: true
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: ${spring.application.name}
+  namespace: ${spring.profiles.active}
+  labels:
+    app: ${spring.application.name}
+    spring-boot: "true"
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+  selector:
+    app: ${spring.application.name}
+
+---

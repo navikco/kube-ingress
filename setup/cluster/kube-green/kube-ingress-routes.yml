@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kube-ingress
+  namespace: kube-green
+  annotations:
+    ingress.kubernetes.io/rewrite-target: /
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: admin
+          servicePort: 8080
+      - path: /kube/customers/
+        backend:
+          serviceName: customers
+          servicePort: 8080
+      - path: /kube/accounts/
+        backend:
+          serviceName: accounts
+          servicePort: 8080
+      - path: /kube/users/
+        backend:
+          serviceName: users
+          servicePort: 8080

@@ -1,0 +1,9 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kube-green-admin-role
+  namespace: kube-green
+rules:
+- apiGroups: [""]
+  resources: ["endpoints", "configmaps", "secrets", "services", "pods", "deployments"]
+  verbs: ["get", "list", "watch", "create", "apply", "update", "patch", "delete"]
