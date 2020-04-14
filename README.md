@@ -18,6 +18,7 @@ _**Kube-Land Utility Scripts/Tools**_
 | **Kubernetes Ingress** | For Request Routing / API Gateway |
 | **NGINX Ingress Controller** | NGINX Ingress Controller |
 | **Dockerfile** | For Building Docker Container Image for Microservices |
+| **Docker Registry** | Local Docker Registry For Building/Publishing Docker Container Images for Microservices |
 | **K8Dash** |  K8Dash UI For Monitoring/Managing Kubernetes Cluster Resources |
 
 - Install Kind on your Local Machine (Mac or Windows Instructions below)
