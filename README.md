@@ -7,8 +7,8 @@ _**Run Kubernetes Cluster Locally**_
 
 _**Kube-Land Utility Scripts/Tools**_
 ---
-| Component/Technology   | Purpose |
-| ------------- |:-------------:| 
+| Component/Technology | Purpose |
+| ------------- | ------------- | 
 | **Spring Boot Microservices** | Java Spring Boot Microservices for TEST/DEMO |
 | **Spring Boot Admin Console** | Java Spring Boot Admin Console for Microservices Monitoring from https://github.com/codecentric/spring-boot-admin  |
 | **Gradle** | For building Spring Boot Microservices |
@@ -61,7 +61,9 @@ _**Kube-Land Utility Scripts/Tools**_
 
     - You can Browse your Spring Boot Admin (SBA) Console on --> 
     
-            http://localhost:8080/admin/wallboard/
+    
+http://localhost:8080/admin/wallboard/
+
 
         - If Your SBA Console is not up, you can run the PORT FORWARD command below and retry,
         
@@ -70,9 +72,9 @@ _**Kube-Land Utility Scripts/Tools**_
      
     - You can Browse your Microservices REST API Documentation on --> 
     
-            http://localhost:8080/kube/accounts/info/index.html
-            http://localhost:8080/kube/customers/info/index.html
-            http://localhost:8080/kube/users/info/index.html
+http://localhost:8080/kube/accounts/info/index.html
+http://localhost:8080/kube/customers/info/index.html
+http://localhost:8080/kube/users/info/index.html
      
 
     - Verify if your Microservices are working in your Local Kubernetes Cluster
@@ -80,7 +82,9 @@ _**Kube-Land Utility Scripts/Tools**_
         - Microservice Endpoint
      
             `curl 'http://localhost:8761/kube/accounts/300' -i -X GET -H 'Accept: application/json'`
+            
             `curl 'http://localhost:8761/kube/customers' -i -X GET -H 'Accept: application/json'`
+            
             `curl 'http://localhost:8761/kube/users' -i -X GET -H 'Accept: application/json'`
     
      
@@ -88,7 +92,7 @@ _**Kube-Land Utility Scripts/Tools**_
     
         - Copy the **LONG Security Token** displayed on the Console by the last command and use it to Login on K8Dash UI 
     
-            http://localhost:8000/
+http://localhost:8000/
 
         - If Your K8Dash UI is not up on Windows, you can run the PORT FORWARD command below and retry,
         
