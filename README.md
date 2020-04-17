@@ -58,25 +58,22 @@ _**Kube-Land Utility Scripts/Tools**_
 
 - Once the Command exits with success,
      
-
     - You can Browse your Spring Boot Admin (SBA) Console on --> 
     
-    
-http://localhost:8080/admin/wallboard/
+        http://localhost:8080/admin/wallboard/
 
-
-        - If Your SBA Console is not up, you can run the PORT FORWARD command below and retry,
+    - If Your SBA Console is not up, you can run the PORT FORWARD command below and retry,
         
-            `kubectl port-forward service/ingress-nginx 8080:80 --namespace=ingress-nginx &`
-     
-     
-    - You can Browse your Microservices REST API Documentation on --> 
+        `kubectl port-forward service/ingress-nginx 8080:80 --namespace=ingress-nginx &`
+          
+    - You can Browse your Microservices REST API Documentation on, 
     
-http://localhost:8080/kube/accounts/info/index.html
-http://localhost:8080/kube/customers/info/index.html
-http://localhost:8080/kube/users/info/index.html
-     
+        http://localhost:8080/kube/accounts/info/index.html
 
+        http://localhost:8080/kube/customers/info/index.html
+
+        http://localhost:8080/kube/users/info/index.html
+     
     - Verify if your Microservices are working in your Local Kubernetes Cluster
         
         - Microservice Endpoint
@@ -87,25 +84,21 @@ http://localhost:8080/kube/users/info/index.html
             
             `curl 'http://localhost:8761/kube/users' -i -X GET -H 'Accept: application/json'`
     
-     
     - You can Browse your K8Dash UI on --> 
     
         - Copy the **LONG Security Token** displayed on the Console by the last command and use it to Login on K8Dash UI 
     
-http://localhost:8000/
+            http://localhost:8000/
 
         - If Your K8Dash UI is not up on Windows, you can run the PORT FORWARD command below and retry,
         
             `kubectl port-forward deployment/k8dash 8000:4654 --namespace=kube-system &`
-       
-       
        
     - You should be also able to execute any **kubectl** Commands
     
     - To Check your Local Kubernetes Cluster,
     
         `kubectl get nodes`
-
 
 
 - To Deploy Test Apps/Microservices Manually via **kubectl** Commands,
@@ -160,6 +153,3 @@ _**Cleanup/Destroy LOCAL Workspace once Done**_
 `cd setup/scripts/` 
 
 `./destroyKubeLandCluster.sh`
-
-
-
