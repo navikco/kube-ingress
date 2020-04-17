@@ -10,7 +10,7 @@ _**Kube-Land Utility Scripts/Tools**_
 | Component/Technology | Purpose |
 | ------------- | ------------- | 
 | **Spring Boot Microservices** | Java Spring Boot Microservices for TEST/DEMO |
-| **Spring Boot Admin Console** | Java Spring Boot Admin Console for Microservices Monitoring from https://github.com/codecentric/spring-boot-admin  |
+| **Spring Boot Admin Console** | Java Spring Boot Admin Console for Microservices Monitoring from <BR/> https://github.com/codecentric/spring-boot-admin  |
 | **Gradle** | For building Spring Boot Microservices |
 | **Rest API Docs** | For Auto-generating Spring Boot Microservices REST API Documentation |
 | **Kubernetes Kind** | Local Kubernetes Test Tool "Kind" from https://kind.sigs.k8s.io/ |
