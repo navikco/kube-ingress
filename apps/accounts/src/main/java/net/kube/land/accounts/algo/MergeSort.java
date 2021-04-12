@@ -5,7 +5,7 @@ import java.util.Arrays;
 //TC - Linear - o(n log  n) Worst case o(n^2)
 //SC - Linear - o(n)
 //Purpose - Quick sort the given input array
-public class QuickSort {
+public class MergeSort {
 
     public static void main(String[] args) {
 

@@ -18,6 +18,10 @@ public class TreePlay {
         node.insert(4);
         node.insert(7);
         node.insert(9);
+        node.insert(5);
+
+        depthFirstSearch.longestPath(node);
+        System.out.println("Tree:Diameter[6, 8, 3, 2, 4, 7, 9] :::>>> " + depthFirstSearch.diameter);
 
         System.out.println("Tree:Count :::>>> " + node.count());
         List<Integer> sums = new ArrayList<>();
@@ -61,6 +65,16 @@ public class TreePlay {
         tree3.insert(4);
         tree3.insert(4);
         System.out.println("Balanced Tree[1,2,2,3,3,null,null,4,4] :::>>> " + depthFirstSearch.isBalanced(tree3));
+
+        List<String> paths = new ArrayList<>();
+        Tree.Node tree4 = new Tree.Node(6);
+        tree4.insert(3);
+        tree4.insert(8);
+        tree4.insert(4);
+        tree4.insert(2);
+        tree4.insert(7);
+        depthFirstSearch.tracePaths(tree4, tree4, 0, tree4.getData() + "", paths);
+        paths.stream().forEach(path -> System.out.print(path + " "));
     }
 
     public void findSumByLevel(List<Integer> averages, Tree.Node node, int i) {
@@ -156,5 +170,40 @@ public class TreePlay {
             return -1;
         }
         return Math.max(leftCount, rightCount) + 1;
+    }
+
+    private void tracePaths(Tree.Node root, Tree.Node node, int index, String path, List<String> paths) {
+
+        if (node.getLeft() == null && node.getRight() == null) {
+            paths.add(path);
+        }
+        if (node.getLeft() != null) {
+            String leftPath = path + "->" + node.getLeft().getData();
+            tracePaths(root, node.getLeft(), index, leftPath, paths);
+        }
+        if (node.getRight() != null) {
+            String rightPath = path + "->" + node.getRight().getData();
+            tracePaths(root, node.getRight(), index, rightPath, paths);
+        }
+    }
+
+    int diameter = 0;
+
+    public int diameterOfBinaryTree(Tree.Node root) {
+
+        longestPath(root);
+        return diameter;
+    }
+
+    private int longestPath(Tree.Node node) {
+
+        if (node == null) {
+            return 0;
+        }
+        int leftPath = longestPath(node.getLeft());
+        int rightPath = longestPath(node.getRight());
+
+        diameter = Math.max(diameter, leftPath + rightPath);
+        return Math.max(leftPath, rightPath) + 1;
     }
 }

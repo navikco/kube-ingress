@@ -14,6 +14,8 @@ public class SlidingWindowPlay {
         System.out.println("Smallest Sliding Window SUM [2, 1, 5, 2, 3, 2, 7], 7 :::>>> " + slidingWindowPlay.smallestSlidingWindowSum(new int[]{2, 1, 5, 2, 3, 2, 7}, 7));
         System.out.println("Sliding Window Minimum Sub Array [2, 1, 5, 2, 3, 2], 7 :::>>> " + slidingWindowPlay.findMinSubArray(7, new int[]{2, 1, 5, 2, 3, 2}));
         System.out.println("Sliding Window Minimum Sub Array [3, 4, 1, 1, 6], 8 :::>>> " + slidingWindowPlay.findMinSubArray(8, new int[]{3, 4, 1, 1, 6}));
+
+        System.out.println("Sliding Window Max Sum from Sub Array [34, -50, 42, 14, -5, 86] :::>>> " + SlidingWindowPlay.findMaxSumSubArray(new int[]{34, -50, 42, 14, -5, 86, -7}));
     }
 
     public double[] slidingWindowAverage(int[] nums, int k) {
@@ -84,5 +86,21 @@ public class SlidingWindowPlay {
         }
 
         return smallestSubArray == Integer.MAX_VALUE ? 0 : smallestSubArray;
+    }
+
+//  [34, -50, 42, 14, -5, 86, -7] - 137
+    public static int findMaxSumSubArray(int[] nums) {
+
+        int windowStart = 0, sum = 0, maxSum = 0;
+        for (int windowEnd = 0; windowEnd < nums.length; windowEnd++) {
+
+            sum += nums[windowEnd];
+            if (sum > maxSum) {
+                maxSum = sum;
+            } else if (sum < maxSum && nums[windowEnd] > nums[windowStart]) {
+                sum -= nums[windowStart++];
+            }
+        }
+        return maxSum;
     }
 }

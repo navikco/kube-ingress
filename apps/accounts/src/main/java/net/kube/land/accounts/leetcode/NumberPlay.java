@@ -15,11 +15,13 @@ public class NumberPlay {
 
         System.out.println("ClosestSum :::>>> " + numberPlay.closestSum(new int[]{-1, 3, 8, 2, 9, 5}, new int[]{4, 1, 2, 10, 5, 20}, 24));
 
+//        System.out.println("Sub Array Sum [12, 1, 61, 5, 9, 2] :::>>> " + numberPlay.subarraySum(new int[]{12, 1, 61, 5, 9, 2}, 24));
+
         System.out.println("MissingNumber :::>>> " + numberPlay.missingNumber(new int[]{2, 3, 0, 6, 1, 4}));
 
-        int[] a = new int[]{3,2,1};
+        int[] a = new int[]{3, 2, 1};
         numberPlay.multiplyOthers(a);
-        for(int i=0; i<a.length; i++) {
+        for (int i = 0; i < a.length; i++) {
             System.out.println("Multiply Others :::>>> " + a[i]);
         }
 
@@ -186,7 +188,7 @@ public class NumberPlay {
         while (left <= right) {
 
             pivot = left + (right - left) / 2;
-            num = (long)pivot * pivot;
+            num = (long) pivot * pivot;
             if (num > x) {
                 right = pivot - 1;
             } else if (num < x) {
@@ -244,4 +246,26 @@ public class NumberPlay {
         }
         return num;
     }
+//
+//    public int[] subarraySum(int[] nums, int k) {
+//
+//        Arrays.sort(nums);
+//
+//        for (int i = 0; i < nums.length; i++) {
+//
+//
+//        }
+//
+//        int count = 0;
+//        for (int start = 0; start < nums.length; start++) {
+//            for (int end = start + 1; end <= nums.length; end++) {
+//                int sum = 0;
+//                for (int i = start; i < end; i++)
+//                    sum += nums[i];
+//                if (sum == k)
+//                    count++;
+//            }
+//        }
+//        return count;
+//    }
 }

@@ -1,8 +1,6 @@
 package net.kube.land.accounts.leetcode;
 
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Set;
+import java.util.*;
 
 public class StringPlay {
 
@@ -23,7 +21,9 @@ public class StringPlay {
 
         System.out.println("Alphanumeric String Palindrome :::>>> " + stringPlay.isPalindrome("A man, a plan, a canal: Panama"));
 
-        System.out.println("String Palindrome with ONE Bad Character :::>>> " + stringPlay.validPalindrome("naamvaan"));
+        System.out.println("String Palindrome with ONE Bad Character [naamvaan] :::>>> " + stringPlay.validPalindromeDeleteOneChar("naamvaan"));
+        System.out.println("String Palindrome with ONE Bad Character [deeee] :::>>> " + stringPlay.validPalindromeDeleteOneChar("deeee"));
+        System.out.println("String Palindrome with ONE Bad Character [abcba] :::>>> " + stringPlay.validPalindromeDeleteOneChar("abcba"));
 
         System.out.println("String Anagram :::>>> " + stringPlay.isAnagram("nagAram", "Anagram"));
 
@@ -36,6 +36,14 @@ public class StringPlay {
         System.out.println("Add Strings[1, 9] :::>>> " + stringPlay.addStrings("1", "9"));
 
         System.out.println("Backspace Tracking for Two Strings[aa##a, #aaa##] :::>>> " + stringPlay.backspaceCompare("aa##a", "#aaa##"));
+
+        System.out.println("Alien Sorted [hello,hello] : abcdefghijklmnopqrstuvwxyz :::>>> " + stringPlay.isAlienSorted(new String[]{"hello","hello"}, "abcdefghijklmnopqrstuvwxyz"));
+        System.out.println("Alien Sorted [hello,leetcode] : hlabcdefgijkmnopqrstuvwxyz :::>>> " + stringPlay.isAlienSorted(new String[]{"hello","leetcode"}, "hlabcdefgijkmnopqrstuvwxyz"));
+        System.out.println("Alien Sorted [word,world,row] : worldabcefghijkmnpqstuvxyz :::>>> " + stringPlay.isAlienSorted(new String[]{"word","world","row"}, "worldabcefghijkmnpqstuvxyz"));
+        System.out.println("Alien Sorted [apple,app] : abcdefghijklmnopqrstuvwxyz :::>>> " + stringPlay.isAlienSorted(new String[]{"apple","app"}, "abcdefghijklmnopqrstuvwxyz"));
+
+        System.out.println("Valid Word Abbreviation [internationalization, i12iz4n] :::>>> " + stringPlay.validWordAbbreviation("internationalization", "i12iz4n"));
+
     }
 
     public String firstRecurringChar(String s) {
@@ -203,28 +211,34 @@ public class StringPlay {
         }
     }
 
-    public boolean validPalindrome(String s) {
+    public boolean validPalindromeDeleteOneChar(String s) {
 
-        int deleteCount = 0;
-        int length = s.length();
-
-        for (int i = 0, j = length - 1; i < length - 1 && j >= 1; i++, j--) {
+        int i = 0;
+        int j = s.length() - 1;
+        while (i < j) {
 
             if (s.charAt(i) != s.charAt(j)) {
-                if (deleteCount > 1) {
-                    return false;
-                } else {
-                    if (s.charAt(i) == s.charAt(j-1)) {
-                        deleteCount++;
-                        j--;
-                    } else if (s.charAt(i+1) == s.charAt(j)) {
-                        deleteCount++;
-                        i++;
-                    } else {
-                        return false;
-                    }
+                if (i == j - 1) {
+                    return true;
                 }
+                return palindrome(s.substring(i, j)) || palindrome(s.substring(i + 1, j + 1));
             }
+            i++;
+            j--;
+        }
+        return true;
+    }
+
+    private boolean palindrome(String s) {
+
+        int i = 0;
+        int j = s.length() - 1;
+        while (i < j) {
+            if (s.charAt(i) != s.charAt(j)) {
+                return false;
+            }
+            i++;
+            j--;
         }
         return true;
     }
@@ -368,5 +382,67 @@ public class StringPlay {
             return;
         }
         sb.delete(sb.length() - 1, sb.length());
+    }
+
+    public boolean isAlienSorted(String[] words, String order) {
+
+        Map<Character, Integer> alphabet = new HashMap<>();
+        for (int i = 0; i < order.length(); i++) {
+            alphabet.put(order.charAt(i), i + 1);
+        }
+
+        int charIndex = 0;
+        for (int i = 0; i < words.length - 1; i++) {
+
+            int order1 = 0, order2 = 0;
+            if (words[i].length() > charIndex) {
+                order1 = alphabet.get(words[i].charAt(charIndex));
+            }
+            if (words[i + 1].length() > charIndex) {
+                order2 = alphabet.get(words[i + 1].charAt(charIndex));
+            }
+
+            if (order1 == order2) {
+                if (charIndex < words[i].length() || charIndex < words[i + 1].length()) {
+                    charIndex++;
+                    i--;
+                }
+            } else if (order1 < order2) {
+                charIndex = 0;
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean validWordAbbreviation(String word, String abbr) {
+
+        if (abbr.length() > word.length()) {
+            return false;
+        }
+        StringBuffer abbrBuffer = new StringBuffer(word);
+        for (int i = 0; i < abbr.length(); i++) {
+            if (abbrBuffer.length() == 0) {
+                return false;
+            }
+            if (Character.isDigit(abbr.charAt(i)) && abbr.charAt(i) != '0') {
+                int num = Character.getNumericValue(abbr.charAt(i));
+                if (i < abbr.length() - 1 && Character.isDigit(abbr.charAt(i + 1))) {
+                    num = Integer.parseInt(num + "" + Character.getNumericValue(abbr.charAt(i + 1)));
+                    i++;
+                }
+                if (abbrBuffer.length() < num) {
+                    return false;
+                }
+                abbrBuffer.delete(0, num);
+            } else {
+                if (abbrBuffer.charAt(0) != abbr.charAt(i)) {
+                    return false;
+                }
+                abbrBuffer.deleteCharAt(0);
+            }
+        }
+        return abbrBuffer.length() == 0;
     }
 }
